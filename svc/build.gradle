@@ -1,0 +1,36 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.3.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+}
+
+group = 'com.eleks.game'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+//    implementation 'com.h2database:h2'
+//    implementation 'org.flywaydb:flyway-core'
+//    implementation(group: 'io.jsonwebtoken', name: 'jjwt', version: "${jsonWebToken}")
+//    implementation(group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa')
+//    implementation(group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "${jacksonCore}")
+//    implementation(group: 'org.springframework.boot', name: 'spring-boot-starter-security')
+//    testImplementation(group: 'com.google.code.bean-matchers', name: 'bean-matchers', version: "${googleBeanMathchers}")
+//    testImplementation(group: 'org.springframework.security', name: 'spring-security-test', version: "${springSecurityTest}")
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation(group: 'org.springframework.boot', name: 'spring-boot-starter-validation')
+    implementation(group: 'org.springframework', name: 'spring-aspects', version: "${springAspects}")
+    implementation(group: 'io.springfox', name: 'springfox-swagger2', version: "${swagger2}")
+    implementation(group: 'io.springfox', name: 'springfox-swagger-ui', version: "${swaggerUi}")
+
+    testImplementation(group: 'org.springframework.boot', name: 'spring-boot-starter-test')
+    testImplementation(group: 'org.junit.vintage', name: 'junit-vintage-engine', version: "${junitVintage}")
+}
+
+test {
+    useJUnitPlatform()
+}

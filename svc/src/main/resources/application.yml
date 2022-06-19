@@ -1,0 +1,8 @@
+who-am-i:
+  api:
+    version: v1
+
+server:
+  port: 8082
+  servlet:
+    context-path: /api/${who-am-i.api.version}
