@@ -22,6 +22,14 @@ import static java.util.stream.Collectors.toList;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
 {
 
+    @ExceptionHandler(RuntimeException.class)
+    public final ResponseEntity<ErrorResponse> handleRuntimeExceptions(RuntimeException ex)
+    {
+        return new ResponseEntity<>(new ErrorResponse("Server Error",
+            Collections.singletonList(ex.getLocalizedMessage())),
+            HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ErrorResponse> handleExceptions(Exception ex)
     {

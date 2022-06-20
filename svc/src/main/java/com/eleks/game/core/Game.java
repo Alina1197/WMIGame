@@ -1,14 +1,25 @@
 package com.eleks.game.core;
 
+import com.eleks.game.enums.QuestionAnswer;
+import com.eleks.game.model.request.QuestionRequest;
+import com.eleks.game.model.response.TurnDetails;
+
+
 public interface Game
 {
     void startGame();
 
-    boolean makeTurn();
-
-    String getTurn();
-
-    void changeTurn();
+    Turn getTurn();
 
     boolean isFinished();
+
+    void askQuestion(String roomId, String player, QuestionRequest askQuestion);
+
+    void answerQuestion(String roomId, String player, QuestionAnswer askQuestion);
+
+    void askGuessingQuestion(String roomId, String player, QuestionRequest askQuestion, boolean guessStatus);
+
+    void answerGuessingQuestion(String roomId, String player, QuestionAnswer askQuestion, boolean guessStatus);
+
+    TurnDetails getTurnInfo(String roomId, String player);
 }

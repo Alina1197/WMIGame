@@ -1,20 +1,21 @@
 package com.eleks.game.model.response;
 
+import com.eleks.game.core.Turn;
 import com.eleks.game.core.impl.RandomGame;
 
 import java.util.Objects;
 
 public class GameDetails
 {
-    private String currentTurn;
-
-    public GameDetails(String currentTurn)
-    {
-        this.currentTurn = currentTurn;
-    }
+    private Turn currentTurn;
 
     public GameDetails()
     {
+    }
+
+    public GameDetails(Turn turn)
+    {
+        this.currentTurn = turn;
     }
 
     public static GameDetails of(RandomGame game)
@@ -22,12 +23,12 @@ public class GameDetails
         return new GameDetails(game.getTurn());
     }
 
-    public String getCurrentTurn()
+    public Turn getCurrentTurn()
     {
         return currentTurn;
     }
 
-    public void setCurrentTurn(String currentTurn)
+    public void setCurrentTurn(Turn currentTurn)
     {
         this.currentTurn = currentTurn;
     }
