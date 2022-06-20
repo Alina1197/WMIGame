@@ -3,8 +3,7 @@ package com.eleks.game.core.impl;
 import com.eleks.game.core.Player;
 import com.eleks.game.enums.PlayerState;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
+import java.util.Objects;
 
 public class RandomPlayer implements Player
 {
@@ -14,6 +13,8 @@ public class RandomPlayer implements Player
     private String character;
     private boolean suggestStatus = false;
     private PlayerState playerState;
+    private boolean enteredAnswer;
+    private boolean enteredQuestion;
 
     public RandomPlayer(String id, String roomId, String nickname)
     {
@@ -82,28 +83,61 @@ public class RandomPlayer implements Player
         this.playerState = playerState;
     }
 
-    @Override
-    public String getName()
+    public boolean isEnteredAnswer()
     {
-        return getNickname();
+        return enteredAnswer;
+    }
+
+    public void setEnteredAnswer(boolean enteredAnswer)
+    {
+        this.enteredAnswer = enteredAnswer;
+    }
+
+    public boolean isEnteredQuestion()
+    {
+        return enteredQuestion;
+    }
+
+    public void setEnteredQuestion(boolean enteredQuestion)
+    {
+        this.enteredQuestion = enteredQuestion;
     }
 
     @Override
-    public Future<String> getQuestion(String question)
+    public boolean equals(Object o)
     {
-        return CompletableFuture.completedFuture(question);
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        RandomPlayer that = (RandomPlayer) o;
+        return suggestStatus == that.suggestStatus && enteredAnswer == that.enteredAnswer && enteredQuestion == that.enteredQuestion && Objects.equals(id, that.id) &&
+            Objects.equals(roomId, that.roomId) && Objects.equals(nickname, that.nickname) && Objects.equals(character, that.character) &&
+            playerState == that.playerState;
     }
 
     @Override
-    public Future<String> askQuestion(String question, String character)
+    public int hashCode()
     {
-        return CompletableFuture.completedFuture(question);
+        return Objects.hash(id, roomId, nickname, character, suggestStatus, playerState, enteredAnswer, enteredQuestion);
     }
 
     @Override
-    public Future<String> answerQuestion(String question, String character, String answer)
+    public String toString()
     {
-        return CompletableFuture.completedFuture(answer);
+        return "RandomPlayer{" +
+            "id='" + id + '\'' +
+            ", roomId='" + roomId + '\'' +
+            ", nickname='" + nickname + '\'' +
+            ", character='" + character + '\'' +
+            ", suggestStatus=" + suggestStatus +
+            ", playerState=" + playerState +
+            ", enteredAnswer=" + enteredAnswer +
+            ", enteredQuestion=" + enteredQuestion +
+            '}';
     }
-
 }

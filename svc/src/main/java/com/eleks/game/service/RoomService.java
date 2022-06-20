@@ -20,4 +20,6 @@ public interface RoomService
     List<RoomDetails> findAvailableRooms(String playerId);
 
     void suggestCharacter(String roomId, String playerNickname, CharacterSuggestion suggestion);
+
+    void leaveRoom(String roomId, String player);
 }

@@ -39,7 +39,7 @@ public class RoomController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RoomDetails> findById(@PathVariable("id") String roomId)
+    public ResponseEntity<RoomDetails> findRoomById(@PathVariable("id") String roomId)
     {
         return ResponseEntity.ok(this.roomService.findRoomById(roomId));
     }
@@ -64,44 +64,13 @@ public class RoomController
     public ResponseEntity<String> startGame(@PathVariable("id") String roomId)
     {
         return ResponseEntity.ok("Game started successfully! Current turn of the player: " +
-            this.roomService.startGame(roomId).getCurrentTurn());
+            this.roomService.startGame(roomId).getCurrentTurn().getGuesser().getNickname());
     }
 
-//    @GetMapping("/{id}/turn")
-//    public ResponseEntity<TurnDetails> findTurnInfo(@PathVariable("id") String id,
-//                                                    @RequestHeader(PLAYER) String player)
-//    {
-//        return this.roomService.findTurnInfo(id, player)
-//            .map(ResponseEntity::ok)
-//            .orElseGet(() -> ResponseEntity.notFound().build());
-//    }
-//
-//
-//    @PostMapping("/{id}/questions")
-//    public void askQuestion(@PathVariable("id") String id,
-//                            @RequestHeader(PLAYER) String player, @RequestBody Message message)
-//    {
-//        this.roomService.askQuestion(id, player, message.getMessage());
-//    }
-//
-//    @PostMapping("/{id}/guess")
-//    public void submitGuess(@PathVariable("id") String id,
-//                            @RequestHeader(PLAYER) String player, @RequestBody Message message)
-//    {
-//        this.roomService.submitGuess(id, player, message.getMessage());
-//    }
-//
-//    @PostMapping("/{id}/answer")
-//    public void answerQuestion(@PathVariable("id") String id,
-//                               @RequestHeader(PLAYER) String player, @RequestBody Message message)
-//    {
-//        this.roomService.answerQuestion(id, player, message.getMessage());
-//    }
-//
-//    @DeleteMapping("/{id}/leave")
-//    public void leaveGame(@PathVariable("id") String id,
-//                          @RequestHeader(PLAYER) String player)
-//    {
-//        this.roomService.leaveGame(id, player);
-//    }
+    @DeleteMapping("/{id}/leave")
+    public void leaveRoom(@PathVariable("id") String roomId,
+                          @RequestHeader(PLAYER) String player)
+    {
+        this.roomService.leaveRoom(roomId, player);
+    }
 }
