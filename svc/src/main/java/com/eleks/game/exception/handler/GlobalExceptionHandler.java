@@ -13,6 +13,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.Collections;
 
+import static com.eleks.game.components.Constants.FORBIDDEN;
+import static com.eleks.game.components.Constants.NOT_FOUND;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
@@ -39,7 +41,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(RoomNotFoundException.class)
     public final ResponseEntity<ErrorResponse> handleRoomNotFoundException(RoomNotFoundException ex)
     {
-        return new ResponseEntity<>(new ErrorResponse("Not Found",
+        return new ResponseEntity<>(new ErrorResponse(NOT_FOUND,
             Collections.singletonList(ex.getLocalizedMessage())),
             HttpStatus.NOT_FOUND);
     }
@@ -47,7 +49,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(PlayerNotFoundException.class)
     public final ResponseEntity<ErrorResponse> handlePlayerNotFoundException(RoomNotFoundException ex)
     {
-        return new ResponseEntity<>(new ErrorResponse("Not Found",
+        return new ResponseEntity<>(new ErrorResponse(NOT_FOUND,
             Collections.singletonList(ex.getLocalizedMessage())),
             HttpStatus.NOT_FOUND);
     }
@@ -55,7 +57,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(DuplicateRoomException.class)
     public final ResponseEntity<ErrorResponse> handleDuplicateException(DuplicateRoomException ex)
     {
-        return new ResponseEntity<>(new ErrorResponse("Conflict",
+        return new ResponseEntity<>(new ErrorResponse(FORBIDDEN,
             Collections.singletonList(ex.getLocalizedMessage())),
             HttpStatus.CONFLICT);
     }
@@ -63,7 +65,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(RoomStateException.class)
     public final ResponseEntity<ErrorResponse> handleRoomStateException(RoomStateException ex)
     {
-        return new ResponseEntity<>(new ErrorResponse("Forbidden",
+        return new ResponseEntity<>(new ErrorResponse(FORBIDDEN,
             Collections.singletonList(ex.getLocalizedMessage())),
             HttpStatus.FORBIDDEN);
     }
@@ -71,7 +73,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(AnswerGuessingQuestionException.class)
     public final ResponseEntity<ErrorResponse> handleAnswerGuessingQuestionException(AnswerGuessingQuestionException ex)
     {
-        return new ResponseEntity<>(new ErrorResponse("Forbidden",
+        return new ResponseEntity<>(new ErrorResponse(FORBIDDEN,
             Collections.singletonList(ex.getLocalizedMessage())),
             HttpStatus.FORBIDDEN);
     }
@@ -79,7 +81,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(TurnException.class)
     public final ResponseEntity<ErrorResponse> handleWException(TurnException ex)
     {
-        return new ResponseEntity<>(new ErrorResponse("Forbidden",
+        return new ResponseEntity<>(new ErrorResponse(FORBIDDEN,
             Collections.singletonList(ex.getLocalizedMessage())),
             HttpStatus.FORBIDDEN);
     }

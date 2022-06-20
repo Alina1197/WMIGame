@@ -1,13 +1,16 @@
 package com.eleks.game.core;
 
+import com.eleks.game.core.impl.RandomPlayer;
 import com.eleks.game.enums.QuestionAnswer;
 import com.eleks.game.model.request.QuestionRequest;
-import com.eleks.game.model.response.TurnDetails;
 
+import java.util.List;
 
 public interface Game
 {
     void startGame();
+
+    List<RandomPlayer> getGamePLayers();
 
     Turn getTurn();
 
@@ -20,6 +23,4 @@ public interface Game
     void askGuessingQuestion(String roomId, String player, QuestionRequest askQuestion, boolean guessStatus);
 
     void answerGuessingQuestion(String roomId, String player, QuestionAnswer askQuestion, boolean guessStatus);
-
-    TurnDetails getTurnInfo(String roomId, String player);
 }

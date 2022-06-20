@@ -17,6 +17,7 @@ public class LoggerAspect
 
     @Pointcut("execution(* com.eleks.game.*.*.*(..))")
     private void generalPointcut() {
+        //
     }
 
     @AfterThrowing(pointcut = "generalPointcut() throws Exception", throwing = "ex")

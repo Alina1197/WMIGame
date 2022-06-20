@@ -12,7 +12,8 @@ import javax.validation.Valid;
 
 import java.util.List;
 
-import static com.eleks.game.utils.StringUtils.Headers.PLAYER;
+import static com.eleks.game.components.Constants.PLAYER;
+
 
 @RestController
 @RequestMapping("/rooms")

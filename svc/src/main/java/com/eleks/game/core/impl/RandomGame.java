@@ -11,7 +11,6 @@ import com.eleks.game.exception.PlayerNotFoundException;
 import com.eleks.game.exception.RoomNotFoundException;
 import com.eleks.game.exception.TurnException;
 import com.eleks.game.model.request.QuestionRequest;
-import com.eleks.game.model.response.TurnDetails;
 import com.eleks.game.repository.RoomRepository;
 import org.springframework.stereotype.Component;
 
@@ -50,6 +49,12 @@ public class RandomGame implements Game
     }
 
     @Override
+    public List<RandomPlayer> getGamePLayers()
+    {
+        return randomPlayers;
+    }
+
+    @Override
     public Turn getTurn()
     {
         return currentTurn;
@@ -66,6 +71,7 @@ public class RandomGame implements Game
     {
         Room room = checkRoomExistence(roomId);
         List<RandomPlayer> players = room.getRandomPlayers();
+        cleanPlayersValues(players);
         if (room.getRoomState().equals(RoomState.GAME_IN_PROGRESS))
         {
             var askingPlayer = players
@@ -76,7 +82,7 @@ public class RandomGame implements Game
 
             if (askingPlayer.getPlayerState().equals(PlayerState.ASK_QUESTION))
             {
-                room.getGame().getTurn().askQuestion(askQuestion.getQuestion(), askingPlayer.getCharacter());
+                askingPlayer.setPlayerQuestion(askQuestion.getQuestion());
                 askingPlayer.setEnteredQuestion(true);
             } else
             {
@@ -102,6 +108,7 @@ public class RandomGame implements Game
             {
                 playersAnswers.add(questionAnswer);
                 answerPlayer.setEnteredAnswer(true);
+                answerPlayer.setPlayerAnswer(String.valueOf(questionAnswer));
             }
 
             if (playersAnswers.size() == players.size() - 1)
@@ -120,10 +127,6 @@ public class RandomGame implements Game
                 {
                     room.getGame().getTurn().changeTurn();
                 }
-                players.forEach(randomPlayer -> {
-                    randomPlayer.setEnteredAnswer(false);
-                    randomPlayer.setEnteredQuestion(false);
-                });
             }
         }
     }
@@ -133,6 +136,7 @@ public class RandomGame implements Game
     {
         Room room = checkRoomExistence(roomId);
         List<RandomPlayer> players = room.getRandomPlayers();
+        cleanPlayersValues(players);
         if (room.getRoomState().equals(RoomState.GAME_IN_PROGRESS))
         {
             var askingPlayer = players
@@ -144,8 +148,9 @@ public class RandomGame implements Game
             if (guessStatus)
             {
                 askingPlayer.setPlayerState(PlayerState.GUESSING);
-                currentTurn.askGuessingQuestion(askQuestion.getQuestion(), askingPlayer.getCharacter(), true);
+                askingPlayer.setPlayerQuestion(askQuestion.getQuestion());
                 askingPlayer.setEnteredQuestion(true);
+                askingPlayer.setGuessing(true);
             } else
             {
                 throw new TurnException("Not your turn! Current turn has player: " + room.getGame().getTurn().getGuesser().getNickname());
@@ -200,28 +205,15 @@ public class RandomGame implements Game
                 {
                     askingPlayer.setPlayerState(PlayerState.ANSWER_QUESTION);
                     currentTurn.changeTurn();
+                    askingPlayer.setGuessing(false);
                 } else
                 {
+                    currentTurn.changeTurn();
                     askingPlayer.setPlayerState(PlayerState.GAME_WINNER);
-                    room.getRandomPlayers().remove(askingPlayer);
+                    room.getGame().getGamePLayers().remove(askingPlayer);
                 }
-                players.forEach(randomPlayer -> {
-                    randomPlayer.setEnteredAnswer(false);
-                    randomPlayer.setEnteredQuestion(false);
-                });
             }
         }
-    }
-
-    @Override
-    public TurnDetails getTurnInfo(String roomId, String playerId)
-    {
-        Room room = checkRoomExistence(roomId);
-        var player = room.getRandomPlayers()
-            .stream()
-            .filter(randomPlayer -> randomPlayer.getId().equals(playerId))
-            .findFirst().orElseThrow();
-        return new TurnDetails(player.getNickname(), player.getCharacter(), player.isSuggestStatus());
     }
 
     private void assignCharacters()
@@ -243,6 +235,16 @@ public class RandomGame implements Game
         return roomRepository.findById(roomId)
             .orElseThrow(
                 () -> new RoomNotFoundException(String.format(ROOM_NOT_FOUND_BY_ID, roomId)));
+    }
+
+    private void cleanPlayersValues(List<RandomPlayer> players)
+    {
+        players.forEach(randomPlayer -> {
+            randomPlayer.setEnteredAnswer(false);
+            randomPlayer.setEnteredQuestion(false);
+            randomPlayer.setPlayerQuestion(null);
+            randomPlayer.setPlayerAnswer(null);
+        });
     }
 
 }

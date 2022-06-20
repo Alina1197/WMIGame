@@ -1,11 +1,10 @@
 package com.eleks.game.core.impl;
 
-import com.eleks.game.core.Player;
 import com.eleks.game.enums.PlayerState;
 
 import java.util.Objects;
 
-public class RandomPlayer implements Player
+public class RandomPlayer
 {
     private String id;
     private String roomId;
@@ -15,6 +14,9 @@ public class RandomPlayer implements Player
     private PlayerState playerState;
     private boolean enteredAnswer;
     private boolean enteredQuestion;
+    private boolean guessing;
+    private String playerQuestion;
+    private String playerAnswer;
 
     public RandomPlayer(String id, String roomId, String nickname)
     {
@@ -103,6 +105,36 @@ public class RandomPlayer implements Player
         this.enteredQuestion = enteredQuestion;
     }
 
+    public String getPlayerQuestion()
+    {
+        return playerQuestion;
+    }
+
+    public void setPlayerQuestion(String playerQuestion)
+    {
+        this.playerQuestion = playerQuestion;
+    }
+
+    public String getPlayerAnswer()
+    {
+        return playerAnswer;
+    }
+
+    public void setPlayerAnswer(String playerAnswer)
+    {
+        this.playerAnswer = playerAnswer;
+    }
+
+    public boolean isGuessing()
+    {
+        return guessing;
+    }
+
+    public void setGuessing(boolean guessing)
+    {
+        this.guessing = guessing;
+    }
+
     @Override
     public boolean equals(Object o)
     {
@@ -115,15 +147,16 @@ public class RandomPlayer implements Player
             return false;
         }
         RandomPlayer that = (RandomPlayer) o;
-        return suggestStatus == that.suggestStatus && enteredAnswer == that.enteredAnswer && enteredQuestion == that.enteredQuestion && Objects.equals(id, that.id) &&
-            Objects.equals(roomId, that.roomId) && Objects.equals(nickname, that.nickname) && Objects.equals(character, that.character) &&
-            playerState == that.playerState;
+        return suggestStatus == that.suggestStatus && enteredAnswer == that.enteredAnswer && enteredQuestion == that.enteredQuestion && guessing == that.guessing &&
+            Objects.equals(id, that.id) && Objects.equals(roomId, that.roomId) && Objects.equals(nickname, that.nickname) &&
+            Objects.equals(character, that.character) && playerState == that.playerState && Objects.equals(playerQuestion, that.playerQuestion) &&
+            Objects.equals(playerAnswer, that.playerAnswer);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, roomId, nickname, character, suggestStatus, playerState, enteredAnswer, enteredQuestion);
+        return Objects.hash(id, roomId, nickname, character, suggestStatus, playerState, enteredAnswer, enteredQuestion, guessing, playerQuestion, playerAnswer);
     }
 
     @Override
@@ -138,6 +171,9 @@ public class RandomPlayer implements Player
             ", playerState=" + playerState +
             ", enteredAnswer=" + enteredAnswer +
             ", enteredQuestion=" + enteredQuestion +
+            ", guessing=" + guessing +
+            ", playerQuestion='" + playerQuestion + '\'' +
+            ", playerAnswer='" + playerAnswer + '\'' +
             '}';
     }
 }

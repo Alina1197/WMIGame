@@ -3,11 +3,9 @@ package com.eleks.game.controller;
 import com.eleks.game.core.Game;
 import com.eleks.game.enums.QuestionAnswer;
 import com.eleks.game.model.request.QuestionRequest;
-import com.eleks.game.model.response.TurnDetails;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.eleks.game.utils.StringUtils.Headers.PLAYER;
+import static com.eleks.game.components.Constants.PLAYER;
 
 @RestController
 @RequestMapping("/games")
@@ -18,13 +16,6 @@ public class GameController
     public GameController(Game randomGame)
     {
         this.randomGame = randomGame;
-    }
-
-    @GetMapping("/{id}/turn")
-    public ResponseEntity<TurnDetails> findTurnInfo(@PathVariable("id") String roomId,
-                                                    @RequestHeader(PLAYER) String playerId)
-    {
-        return ResponseEntity.ok(this.randomGame.getTurnInfo(roomId, playerId));
     }
 
     @PostMapping("/{id}/questions")
