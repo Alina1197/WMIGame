@@ -6,7 +6,10 @@ import com.eleks.game.entity.Room;
 import com.eleks.game.enums.PlayerState;
 import com.eleks.game.enums.QuestionAnswer;
 import com.eleks.game.enums.RoomState;
+import com.eleks.game.exception.AnswerGuessingQuestionException;
+import com.eleks.game.exception.PlayerNotFoundException;
 import com.eleks.game.exception.RoomNotFoundException;
+import com.eleks.game.exception.TurnException;
 import com.eleks.game.model.request.QuestionRequest;
 import com.eleks.game.model.response.TurnDetails;
 import com.eleks.game.repository.RoomRepository;
@@ -16,6 +19,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static com.eleks.game.components.Constants.PLAYER_NOT_FOUND;
 import static com.eleks.game.components.Constants.ROOM_NOT_FOUND_BY_ID;
 
 @Component
@@ -58,7 +62,7 @@ public class RandomGame implements Game
     }
 
     @Override
-    public void askQuestion(String roomId, String player, QuestionRequest askQuestion)
+    public void askQuestion(String roomId, String playerId, QuestionRequest askQuestion)
     {
         Room room = checkRoomExistence(roomId);
         List<RandomPlayer> players = room.getRandomPlayers();
@@ -66,9 +70,9 @@ public class RandomGame implements Game
         {
             var askingPlayer = players
                 .stream()
-                .filter(randomPlayer -> randomPlayer.getId().equals(player))
+                .filter(randomPlayer -> randomPlayer.getId().equals(playerId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Player not found!"));
+                .orElseThrow(() -> new PlayerNotFoundException(String.format(PLAYER_NOT_FOUND, playerId)));
 
             if (askingPlayer.getPlayerState().equals(PlayerState.ASK_QUESTION))
             {
@@ -76,13 +80,13 @@ public class RandomGame implements Game
                 askingPlayer.setEnteredQuestion(true);
             } else
             {
-                throw new RuntimeException("Not your turn!");
+                throw new TurnException("Not your turn! Current turn has player: " + room.getGame().getTurn().getGuesser().getNickname());
             }
         }
     }
 
     @Override
-    public void answerQuestion(String roomId, String player, QuestionAnswer questionAnswer)
+    public void answerQuestion(String roomId, String playerId, QuestionAnswer questionAnswer)
     {
         Room room = checkRoomExistence(roomId);
         List<RandomPlayer> players = room.getRandomPlayers();
@@ -90,9 +94,9 @@ public class RandomGame implements Game
         {
             var answerPlayer = players
                 .stream()
-                .filter(randomPlayer -> randomPlayer.getId().equals(player))
+                .filter(randomPlayer -> randomPlayer.getId().equals(playerId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Player not found!"));
+                .orElseThrow(() -> new PlayerNotFoundException(String.format(PLAYER_NOT_FOUND, playerId)));
             var playersAnswers = currentTurn.getPlayersAnswers();
             if (answerPlayer.getPlayerState().equals(PlayerState.ANSWER_QUESTION))
             {
@@ -125,7 +129,7 @@ public class RandomGame implements Game
     }
 
     @Override
-    public void askGuessingQuestion(String roomId, String player, QuestionRequest askQuestion, boolean guessStatus)
+    public void askGuessingQuestion(String roomId, String playerId, QuestionRequest askQuestion, boolean guessStatus)
     {
         Room room = checkRoomExistence(roomId);
         List<RandomPlayer> players = room.getRandomPlayers();
@@ -133,9 +137,9 @@ public class RandomGame implements Game
         {
             var askingPlayer = players
                 .stream()
-                .filter(randomPlayer -> randomPlayer.getId().equals(player))
+                .filter(randomPlayer -> randomPlayer.getId().equals(playerId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Player not found!"));
+                .orElseThrow(() -> new PlayerNotFoundException(String.format(PLAYER_NOT_FOUND, playerId)));
 
             if (guessStatus)
             {
@@ -144,7 +148,7 @@ public class RandomGame implements Game
                 askingPlayer.setEnteredQuestion(true);
             } else
             {
-                throw new RuntimeException("Not your turn!");
+                throw new TurnException("Not your turn! Current turn has player: " + room.getGame().getTurn().getGuesser().getNickname());
             }
         }
 
@@ -161,7 +165,7 @@ public class RandomGame implements Game
                 .stream()
                 .filter(randomPlayer -> randomPlayer.getId().equals(playerId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Player not found!"));
+                .orElseThrow(() -> new PlayerNotFoundException(String.format(PLAYER_NOT_FOUND, playerId)));
             var playersAnswers = currentTurn.getPlayersAnswers();
             if (answerPlayer.getPlayerState().equals(PlayerState.ANSWER_QUESTION))
             {
@@ -170,7 +174,7 @@ public class RandomGame implements Game
                     playersAnswers.add(questionAnswer);
                 } else
                 {
-                    throw new RuntimeException("You are answering a guessing question! Answers can be only: YES or NO");
+                    throw new AnswerGuessingQuestionException("You are answering a guessing question! Answers can be only: YES or NO");
                 }
             }
 

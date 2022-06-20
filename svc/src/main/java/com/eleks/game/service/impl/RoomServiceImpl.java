@@ -4,6 +4,7 @@ import com.eleks.game.core.impl.RandomGame;
 import com.eleks.game.entity.Room;
 import com.eleks.game.enums.RoomState;
 import com.eleks.game.exception.DuplicateRoomException;
+import com.eleks.game.exception.PlayerNotFoundException;
 import com.eleks.game.exception.RoomNotFoundException;
 import com.eleks.game.exception.RoomStateException;
 import com.eleks.game.model.request.CharacterSuggestion;
@@ -108,7 +109,7 @@ public class RoomServiceImpl implements RoomService
                 return PlayerDetails.of(player);
             } else
             {
-                throw new RuntimeException("Player already enrolled in this room!");
+                throw new RoomStateException("Player already enrolled in this room!");
             }
         }
         throw new RoomStateException("You cannot enroll to this room! Room is full!");
@@ -133,7 +134,7 @@ public class RoomServiceImpl implements RoomService
             var player = players
                 .stream()
                 .filter(randomPlayer -> randomPlayer.getId().equals(headerId))
-                .findFirst().orElseThrow(() -> new RuntimeException("Player not found!"));
+                .findFirst().orElseThrow(() -> new PlayerNotFoundException("Player not found!"));
             if (!player.isSuggestStatus())
             {
                 player.setCharacter(suggestion.getCharacter());
@@ -141,7 +142,7 @@ public class RoomServiceImpl implements RoomService
                 player.setSuggestStatus(true);
             } else
             {
-                throw new RuntimeException("You already suggest the character");
+                throw new RoomStateException("You already suggest the character");
             }
 
             if (players.stream().filter(RandomPlayer::isSuggestStatus).count() == 4)

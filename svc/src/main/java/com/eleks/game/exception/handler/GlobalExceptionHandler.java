@@ -1,8 +1,6 @@
 package com.eleks.game.exception.handler;
 
-import com.eleks.game.exception.DuplicateRoomException;
-import com.eleks.game.exception.RoomNotFoundException;
-import com.eleks.game.exception.RoomStateException;
+import com.eleks.game.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +37,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     @ExceptionHandler(RoomNotFoundException.class)
-    public final ResponseEntity<ErrorResponse> handleRecordNotFoundException(RoomNotFoundException ex)
+    public final ResponseEntity<ErrorResponse> handleRoomNotFoundException(RoomNotFoundException ex)
+    {
+        return new ResponseEntity<>(new ErrorResponse("Not Found",
+            Collections.singletonList(ex.getLocalizedMessage())),
+            HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(PlayerNotFoundException.class)
+    public final ResponseEntity<ErrorResponse> handlePlayerNotFoundException(RoomNotFoundException ex)
     {
         return new ResponseEntity<>(new ErrorResponse("Not Found",
             Collections.singletonList(ex.getLocalizedMessage())),
@@ -55,7 +61,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     @ExceptionHandler(RoomStateException.class)
-    public final ResponseEntity<ErrorResponse> handleWeightIsOverException(RoomStateException ex)
+    public final ResponseEntity<ErrorResponse> handleRoomStateException(RoomStateException ex)
+    {
+        return new ResponseEntity<>(new ErrorResponse("Forbidden",
+            Collections.singletonList(ex.getLocalizedMessage())),
+            HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(AnswerGuessingQuestionException.class)
+    public final ResponseEntity<ErrorResponse> handleAnswerGuessingQuestionException(AnswerGuessingQuestionException ex)
+    {
+        return new ResponseEntity<>(new ErrorResponse("Forbidden",
+            Collections.singletonList(ex.getLocalizedMessage())),
+            HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(TurnException.class)
+    public final ResponseEntity<ErrorResponse> handleWException(TurnException ex)
     {
         return new ResponseEntity<>(new ErrorResponse("Forbidden",
             Collections.singletonList(ex.getLocalizedMessage())),
