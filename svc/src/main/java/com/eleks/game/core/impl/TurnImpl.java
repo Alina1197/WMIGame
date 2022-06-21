@@ -9,8 +9,8 @@ import java.util.List;
 
 public class TurnImpl implements Turn
 {
-    private final List<RandomPlayer> players;
     private final List<QuestionAnswer> playersAnswers = new ArrayList<>();
+    private List<RandomPlayer> players;
     private int currentPlayerIndex = 0;
 
     public TurnImpl(List<RandomPlayer> players)
@@ -35,12 +35,13 @@ public class TurnImpl implements Turn
     }
 
     @Override
-    public void changeTurn()
+    public void changeTurn(List<RandomPlayer> players)
     {
+        this.players = players;
         this.currentPlayerIndex = this.currentPlayerIndex + 1 >= this.players.size() ? 0 : this.currentPlayerIndex + 1;
-        var player = players.get(this.currentPlayerIndex);
+        var player = this.players.get(this.currentPlayerIndex);
         player.setPlayerState(PlayerState.ASK_QUESTION);
-        players.stream()
+        this.players.stream()
             .filter(randomPlayer -> !randomPlayer.getId().equals(player.getId()))
             .forEach(randomPlayer -> randomPlayer.setPlayerState(PlayerState.ANSWER_QUESTION));
     }

@@ -5,6 +5,7 @@ import com.eleks.game.core.impl.RandomPlayer;
 import com.eleks.game.enums.RoomState;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,6 +15,7 @@ public class Room
     private List<RandomPlayer> randomPlayers = new ArrayList<>(4);
     private RoomState roomState = RoomState.WAITING_FOR_PLAYERS;
     private Game game;
+    private List<RandomPlayer> winnerList = new LinkedList<>();
 
     public Room()
     {
@@ -67,6 +69,16 @@ public class Room
         this.game = game;
     }
 
+    public List<RandomPlayer> getWinnerList()
+    {
+        return winnerList;
+    }
+
+    public void setWinnerList(List<RandomPlayer> winnerList)
+    {
+        this.winnerList = winnerList;
+    }
+
     @Override
     public boolean equals(Object o)
     {
@@ -80,13 +92,13 @@ public class Room
         }
         Room room = (Room) o;
         return Objects.equals(id, room.id) && Objects.equals(randomPlayers, room.randomPlayers) && roomState == room.roomState &&
-            Objects.equals(game, room.game);
+            Objects.equals(game, room.game) && Objects.equals(winnerList, room.winnerList);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, randomPlayers, roomState, game);
+        return Objects.hash(id, randomPlayers, roomState, game, winnerList);
     }
 
     @Override
@@ -97,6 +109,7 @@ public class Room
             ", randomPlayers=" + randomPlayers +
             ", roomState=" + roomState +
             ", game=" + game +
+            ", winnerList=" + winnerList +
             '}';
     }
 }

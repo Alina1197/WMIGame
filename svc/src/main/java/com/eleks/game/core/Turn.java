@@ -9,7 +9,7 @@ public interface Turn
 {
     RandomPlayer getGuesser();
 
-    void changeTurn();
+    void changeTurn(List<RandomPlayer> players);
 
     List<QuestionAnswer> getPlayersAnswers();
 }

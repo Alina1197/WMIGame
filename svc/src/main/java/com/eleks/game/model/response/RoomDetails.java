@@ -12,12 +12,14 @@ public class RoomDetails
     private String id;
     private RoomState roomState;
     private List<RandomPlayer> players;
+    private List<RandomPlayer> winners;
 
-    public RoomDetails(String id, RoomState roomState, List<RandomPlayer> players)
+    public RoomDetails(String id, RoomState roomState, List<RandomPlayer> players, List<RandomPlayer> winners)
     {
         this.id = id;
         this.roomState = roomState;
         this.players = players;
+        this.winners = winners;
     }
 
     public RoomDetails()
@@ -26,7 +28,7 @@ public class RoomDetails
 
     public static RoomDetails of(Room room)
     {
-        return new RoomDetails(room.getId(), room.getRoomState(), room.getRandomPlayers());
+        return new RoomDetails(room.getId(), room.getRoomState(), room.getRandomPlayers(), room.getWinnerList());
     }
 
     public String getId()
@@ -59,6 +61,16 @@ public class RoomDetails
         this.players = players;
     }
 
+    public List<RandomPlayer> getWinners()
+    {
+        return winners;
+    }
+
+    public void setWinners(List<RandomPlayer> winners)
+    {
+        this.winners = winners;
+    }
+
     @Override
     public boolean equals(Object o)
     {
@@ -71,13 +83,14 @@ public class RoomDetails
             return false;
         }
         RoomDetails that = (RoomDetails) o;
-        return Objects.equals(id, that.id) && roomState == that.roomState && Objects.equals(players, that.players);
+        return Objects.equals(id, that.id) && roomState == that.roomState && Objects.equals(players, that.players) &&
+            Objects.equals(winners, that.winners);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, roomState, players);
+        return Objects.hash(id, roomState, players, winners);
     }
 
     @Override
@@ -87,6 +100,7 @@ public class RoomDetails
             "id='" + id + '\'' +
             ", roomState=" + roomState +
             ", players=" + players +
+            ", winners=" + winners +
             '}';
     }
 }

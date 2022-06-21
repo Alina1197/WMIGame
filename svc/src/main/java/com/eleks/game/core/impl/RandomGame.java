@@ -125,7 +125,7 @@ public class RandomGame implements Game
 
                 if (positiveAnswers.size() < negativeAnswers.size())
                 {
-                    room.getGame().getTurn().changeTurn();
+                    room.getGame().getTurn().changeTurn(players);
                 }
             }
         }
@@ -197,20 +197,21 @@ public class RandomGame implements Game
 
                 var askingPlayer = players
                     .stream()
-                    .filter(randomPlayer -> randomPlayer.getId().equals(playerId) && randomPlayer.getPlayerState().equals(PlayerState.GUESSING))
+                    .filter(randomPlayer -> randomPlayer.getPlayerState().equals(PlayerState.GUESSING))
                     .findFirst()
-                    .orElseThrow();
+                    .orElseThrow(() -> new PlayerNotFoundException(String.format(PLAYER_NOT_FOUND, playerId)));
 
                 if (positiveAnswers.size() < negativeAnswers.size())
                 {
                     askingPlayer.setPlayerState(PlayerState.ANSWER_QUESTION);
-                    currentTurn.changeTurn();
+                    currentTurn.changeTurn(players);
                     askingPlayer.setGuessing(false);
                 } else
                 {
-                    currentTurn.changeTurn();
-                    askingPlayer.setPlayerState(PlayerState.GAME_WINNER);
                     room.getGame().getGamePLayers().remove(askingPlayer);
+                    currentTurn.changeTurn(players);
+                    askingPlayer.setPlayerState(PlayerState.GAME_WINNER);
+                    room.getWinnerList().add(askingPlayer);
                 }
             }
         }
