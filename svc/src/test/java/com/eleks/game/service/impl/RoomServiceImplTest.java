@@ -29,28 +29,29 @@ class RoomServiceImplTest
         logger.log(Level.INFO, "Current room details {0}", asJsonString(room) + "\n");
         var roomId = room.getId();
 
-        enrollToRoom(roomId, room);
+        enrollToRoom(roomId);
 
-        suggestCharacter(roomId, room);
+        suggestCharacter(roomId);
 
         logger.log(Level.INFO, "Game started successfully! Current turn of the player: {0} ",
             roomService.startGame(roomId).getCurrentTurn().getGuesser().getNickname() + "\n");
 
-        logger.log(Level.INFO, "Current room details after start the game and swapping characters\n {0}", asJsonString(room) + "\n");
+        logger.log(Level.INFO, "Current room details after start the game and swapping characters\n {0}", asJsonString(
+            RoomDetails.of(repository.findById(roomId).orElseThrow())) + "\n");
 
         var game = repository.findById(roomId).orElseThrow().getGame();
 
-        firstTurn(roomId, game, room);
+        firstTurn(roomId, game);
 
-        secondTurn(roomId, game, room);
+        secondTurn(roomId, game);
 
-        thirdTurn(roomId, game, room);
+        thirdTurn(roomId, game);
 
-        forthTurn(roomId, game, room);
+        forthTurn(roomId, game);
 
-        fifthTurn(roomId, game, room);
+        fifthTurn(roomId, game);
 
-        sixthTurn(roomId, game, room);
+        sixthTurn(roomId, game);
     }
 
 
@@ -65,27 +66,29 @@ class RoomServiceImplTest
         }
     }
 
-    private void enrollToRoom(String roomId, RoomDetails room)
+    private void enrollToRoom(String roomId)
     {
         roomService.enrollToRoom(roomId, "p1");
         roomService.enrollToRoom(roomId, "p2");
         roomService.enrollToRoom(roomId, "p3");
         roomService.enrollToRoom(roomId, "p4");
 
-        logger.log(Level.INFO, "Current room details after all Players enrolled to the game {0}", asJsonString(room) + "\n");
+        logger.log(Level.INFO, "Current room details after all Players enrolled to the game {0}",
+            asJsonString(RoomDetails.of(repository.findById(roomId).orElseThrow())) + "\n");
     }
 
-    private void suggestCharacter(String roomId, RoomDetails room)
+    private void suggestCharacter(String roomId)
     {
         roomService.suggestCharacter(roomId, "p1", new CharacterSuggestion("Vlad", "Batman"));
         roomService.suggestCharacter(roomId, "p2", new CharacterSuggestion("Bob", "Superman"));
         roomService.suggestCharacter(roomId, "p3", new CharacterSuggestion("John", "Deadpool"));
         roomService.suggestCharacter(roomId, "p4", new CharacterSuggestion("James", "Rock"));
 
-        logger.log(Level.INFO, "Current room details after all Players suggest the character {0}", asJsonString(room) + "\n");
+        logger.log(Level.INFO, "Current room details after all Players suggest the character {0}",
+            asJsonString(RoomDetails.of(repository.findById(roomId).orElseThrow())) + "\n");
     }
 
-    private void firstTurn(String roomId, Game game, RoomDetails room)
+    private void firstTurn(String roomId, Game game)
     {
         logger.log(Level.INFO, "First turn : Current guesser: {0}", game.getTurn().getGuesser().getNickname() + "\n");
 
@@ -95,10 +98,10 @@ class RoomServiceImplTest
         game.answerQuestion(roomId, "p3", QuestionAnswer.NO);
         game.answerQuestion(roomId, "p4", QuestionAnswer.NOT_SURE);
 
-        logger.log(Level.INFO, "Current room details after first turn loop\n {0}", asJsonString(room) + "\n");
+        logger.log(Level.INFO, "Current room details after first turn loop\n {0}", asJsonString(RoomDetails.of(repository.findById(roomId).orElseThrow())) + "\n");
     }
 
-    private void secondTurn(String roomId, Game game, RoomDetails room)
+    private void secondTurn(String roomId, Game game)
     {
         logger.log(Level.INFO, "Second turn: Current guesser: {0}", game.getTurn().getGuesser().getNickname() + "\n");
 
@@ -108,10 +111,10 @@ class RoomServiceImplTest
         game.answerQuestion(roomId, "p3", QuestionAnswer.NO);
         game.answerQuestion(roomId, "p4", QuestionAnswer.NOT_SURE);
 
-        logger.log(Level.INFO, "Current room details after second turn loop\n {0}", asJsonString(room) + "\n");
+        logger.log(Level.INFO, "Current room details after second turn loop\n {0}", asJsonString(RoomDetails.of(repository.findById(roomId).orElseThrow())) + "\n");
     }
 
-    private void thirdTurn(String roomId, Game game, RoomDetails room)
+    private void thirdTurn(String roomId, Game game)
     {
         logger.log(Level.INFO, "Third turn: Current guesser: {0} ", game.getTurn().getGuesser().getNickname() + "\n");
 
@@ -121,11 +124,11 @@ class RoomServiceImplTest
         game.answerQuestion(roomId, "p3", QuestionAnswer.YES);
         game.answerQuestion(roomId, "p4", QuestionAnswer.YES);
 
-        logger.log(Level.INFO, "Current room details after third turn loop\n {0}", asJsonString(room) + "\n");
+        logger.log(Level.INFO, "Current room details after third turn loop\n {0}", asJsonString(RoomDetails.of(repository.findById(roomId).orElseThrow())) + "\n");
     }
 
 
-    private void forthTurn(String roomId, Game game, RoomDetails room)
+    private void forthTurn(String roomId, Game game)
     {
         logger.log(Level.INFO, "Fourth turn: Current guesser:  {0}", game.getTurn().getGuesser().getNickname() + "\n");
 
@@ -135,10 +138,11 @@ class RoomServiceImplTest
         game.answerGuessingQuestion(roomId, "p3", QuestionAnswer.YES, true);
         game.answerGuessingQuestion(roomId, "p4", QuestionAnswer.YES, true);
 
-        logger.log(Level.INFO, "Current room details after fourth turn loop and player Bob guessing\n {0}", asJsonString(room) + "\n");
+        logger.log(Level.INFO, "Current room details after fourth turn loop and player Bob guessing\n {0}",
+            asJsonString(RoomDetails.of(repository.findById(roomId).orElseThrow())) + "\n");
     }
 
-    private void fifthTurn(String roomId, Game game, RoomDetails room)
+    private void fifthTurn(String roomId, Game game)
     {
         logger.log(Level.INFO, "Fifth turn: Current guesser:  {0}", game.getTurn().getGuesser().getNickname() + "\n");
 
@@ -147,10 +151,10 @@ class RoomServiceImplTest
         game.answerQuestion(roomId, "p1", QuestionAnswer.NO);
         game.answerQuestion(roomId, "p3", QuestionAnswer.NO);
 
-        logger.log(Level.INFO, "Current room details after fifth turn loop\n {0}", asJsonString(room) + "\n");
+        logger.log(Level.INFO, "Current room details after fifth turn loop\n {0}", asJsonString(RoomDetails.of(repository.findById(roomId).orElseThrow())) + "\n");
     }
 
-    private void sixthTurn(String roomId, Game game, RoomDetails room)
+    private void sixthTurn(String roomId, Game game)
     {
         logger.log(Level.INFO, "Sixth turn: Current guesser:  {0}", game.getTurn().getGuesser().getNickname() + "\n");
 
@@ -159,7 +163,7 @@ class RoomServiceImplTest
         game.answerQuestion(roomId, "p1", QuestionAnswer.NO);
         game.answerQuestion(roomId, "p3", QuestionAnswer.NO);
 
-        logger.log(Level.INFO, "Current room details after sixth turn loop\n {0}", asJsonString(room) + "\n");
+        logger.log(Level.INFO, "Current room details after sixth turn loop\n {0}", asJsonString(RoomDetails.of(repository.findById(roomId).orElseThrow())) + "\n");
     }
 
 }
