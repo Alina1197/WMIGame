@@ -29,13 +29,9 @@ class RoomServiceImplTest
         logger.log(Level.INFO, "Current room details {0}", asJsonString(room) + "\n");
         var roomId = room.getId();
 
-        enrollToRoom(roomId);
+        enrollToRoom(roomId, room);
 
-        logger.log(Level.INFO, "Current room details after all Players enrolled to the game {0}", asJsonString(room) + "\n");
-
-        suggestCharacter(roomId);
-
-        logger.log(Level.INFO, "Current room details after all Players suggest the character {0}", asJsonString(room) + "\n");
+        suggestCharacter(roomId, room);
 
         logger.log(Level.INFO, "Game started successfully! Current turn of the player: {0} ",
             roomService.startGame(roomId).getCurrentTurn().getGuesser().getNickname() + "\n");
@@ -69,20 +65,24 @@ class RoomServiceImplTest
         }
     }
 
-    private void enrollToRoom(String roomId)
+    private void enrollToRoom(String roomId, RoomDetails room)
     {
         roomService.enrollToRoom(roomId, "p1");
         roomService.enrollToRoom(roomId, "p2");
         roomService.enrollToRoom(roomId, "p3");
         roomService.enrollToRoom(roomId, "p4");
+
+        logger.log(Level.INFO, "Current room details after all Players enrolled to the game {0}", asJsonString(room) + "\n");
     }
 
-    private void suggestCharacter(String roomId)
+    private void suggestCharacter(String roomId, RoomDetails room)
     {
         roomService.suggestCharacter(roomId, "p1", new CharacterSuggestion("Vlad", "Batman"));
         roomService.suggestCharacter(roomId, "p2", new CharacterSuggestion("Bob", "Superman"));
         roomService.suggestCharacter(roomId, "p3", new CharacterSuggestion("John", "Deadpool"));
         roomService.suggestCharacter(roomId, "p4", new CharacterSuggestion("James", "Rock"));
+
+        logger.log(Level.INFO, "Current room details after all Players suggest the character {0}", asJsonString(room) + "\n");
     }
 
     private void firstTurn(String roomId, Game game, RoomDetails room)
