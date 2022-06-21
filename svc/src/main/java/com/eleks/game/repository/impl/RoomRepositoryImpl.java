@@ -30,7 +30,7 @@ public class RoomRepositoryImpl implements RoomRepository
     }
 
     @Override
-    public List<Room> findAllRooms(String playerId)
+    public List<Room> findAllRooms()
     {
         return roomList.stream()
             .filter(room -> room.getRoomState().equals(RoomState.WAITING_FOR_PLAYERS))

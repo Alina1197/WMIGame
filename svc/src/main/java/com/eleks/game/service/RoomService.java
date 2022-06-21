@@ -17,7 +17,7 @@ public interface RoomService
 
     PlayerDetails enrollToRoom(String roomId, String player);
 
-    List<RoomDetails> findAvailableRooms(String playerId);
+    List<RoomDetails> findAvailableRooms();
 
     void suggestCharacter(String roomId, String playerNickname, CharacterSuggestion suggestion);
 

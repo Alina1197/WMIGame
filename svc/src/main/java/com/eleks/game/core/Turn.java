@@ -1,15 +1,15 @@
 package com.eleks.game.core;
 
-import com.eleks.game.core.impl.RandomPlayer;
+import com.eleks.game.core.impl.GamePlayer;
 import com.eleks.game.enums.QuestionAnswer;
 
 import java.util.List;
 
 public interface Turn
 {
-    RandomPlayer getGuesser();
+    GamePlayer getGuesser();
 
-    void changeTurn(List<RandomPlayer> players);
+    void changeTurn(List<GamePlayer> players);
 
     List<QuestionAnswer> getPlayersAnswers();
 }

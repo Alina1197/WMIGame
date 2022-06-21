@@ -1,7 +1,7 @@
 package com.eleks.game.entity;
 
 import com.eleks.game.core.Game;
-import com.eleks.game.core.impl.RandomPlayer;
+import com.eleks.game.core.impl.GamePlayer;
 import com.eleks.game.enums.RoomState;
 
 import java.util.ArrayList;
@@ -12,19 +12,19 @@ import java.util.Objects;
 public class Room
 {
     private String id;
-    private List<RandomPlayer> randomPlayers = new ArrayList<>(4);
+    private List<GamePlayer> gamePlayers = new ArrayList<>(4);
     private RoomState roomState = RoomState.WAITING_FOR_PLAYERS;
     private Game game;
-    private List<RandomPlayer> winnerList = new LinkedList<>();
+    private List<GamePlayer> winnerList = new LinkedList<>();
 
     public Room()
     {
     }
 
-    public Room(String id, List<RandomPlayer> randomPlayers, RoomState roomState, Game game)
+    public Room(String id, List<GamePlayer> gamePlayers, RoomState roomState, Game game)
     {
         this.id = id;
-        this.randomPlayers = randomPlayers;
+        this.gamePlayers = gamePlayers;
         this.roomState = roomState;
         this.game = game;
     }
@@ -39,14 +39,14 @@ public class Room
         this.id = id;
     }
 
-    public List<RandomPlayer> getRandomPlayers()
+    public List<GamePlayer> getRandomPlayers()
     {
-        return randomPlayers;
+        return gamePlayers;
     }
 
-    public void setRandomPlayers(List<RandomPlayer> randomPlayers)
+    public void setRandomPlayers(List<GamePlayer> gamePlayers)
     {
-        this.randomPlayers = randomPlayers;
+        this.gamePlayers = gamePlayers;
     }
 
     public RoomState getRoomState()
@@ -69,12 +69,12 @@ public class Room
         this.game = game;
     }
 
-    public List<RandomPlayer> getWinnerList()
+    public List<GamePlayer> getWinnerList()
     {
         return winnerList;
     }
 
-    public void setWinnerList(List<RandomPlayer> winnerList)
+    public void setWinnerList(List<GamePlayer> winnerList)
     {
         this.winnerList = winnerList;
     }
@@ -91,14 +91,14 @@ public class Room
             return false;
         }
         Room room = (Room) o;
-        return Objects.equals(id, room.id) && Objects.equals(randomPlayers, room.randomPlayers) && roomState == room.roomState &&
+        return Objects.equals(id, room.id) && Objects.equals(gamePlayers, room.gamePlayers) && roomState == room.roomState &&
             Objects.equals(game, room.game) && Objects.equals(winnerList, room.winnerList);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, randomPlayers, roomState, game, winnerList);
+        return Objects.hash(id, gamePlayers, roomState, game, winnerList);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class Room
     {
         return "Room{" +
             "id='" + id + '\'' +
-            ", randomPlayers=" + randomPlayers +
+            ", randomPlayers=" + gamePlayers +
             ", roomState=" + roomState +
             ", game=" + game +
             ", winnerList=" + winnerList +

@@ -1,6 +1,6 @@
 package com.eleks.game.model.response;
 
-import com.eleks.game.core.impl.RandomPlayer;
+import com.eleks.game.core.impl.GamePlayer;
 import com.eleks.game.entity.Room;
 import com.eleks.game.enums.RoomState;
 
@@ -11,10 +11,10 @@ public class RoomDetails
 {
     private String id;
     private RoomState roomState;
-    private List<RandomPlayer> players;
-    private List<RandomPlayer> winners;
+    private List<GamePlayer> players;
+    private List<GamePlayer> winners;
 
-    public RoomDetails(String id, RoomState roomState, List<RandomPlayer> players, List<RandomPlayer> winners)
+    public RoomDetails(String id, RoomState roomState, List<GamePlayer> players, List<GamePlayer> winners)
     {
         this.id = id;
         this.roomState = roomState;
@@ -51,22 +51,22 @@ public class RoomDetails
         this.roomState = roomState;
     }
 
-    public List<RandomPlayer> getPlayers()
+    public List<GamePlayer> getPlayers()
     {
         return players;
     }
 
-    public void setPlayers(List<RandomPlayer> players)
+    public void setPlayers(List<GamePlayer> players)
     {
         this.players = players;
     }
 
-    public List<RandomPlayer> getWinners()
+    public List<GamePlayer> getWinners()
     {
         return winners;
     }
 
-    public void setWinners(List<RandomPlayer> winners)
+    public void setWinners(List<GamePlayer> winners)
     {
         this.winners = winners;
     }

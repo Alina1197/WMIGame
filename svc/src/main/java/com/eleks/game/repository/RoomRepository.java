@@ -11,5 +11,5 @@ public interface RoomRepository
 
     Optional<Room> findById(String roomId);
 
-    List<Room> findAllRooms(String playerId);
+    List<Room> findAllRooms();
 }

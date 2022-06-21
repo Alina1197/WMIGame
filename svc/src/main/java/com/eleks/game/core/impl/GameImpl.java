@@ -22,18 +22,18 @@ import static com.eleks.game.components.Constants.PLAYER_NOT_FOUND;
 import static com.eleks.game.components.Constants.ROOM_NOT_FOUND_BY_ID;
 
 @Component
-public class RandomGame implements Game
+public class GameImpl implements Game
 {
-    private final List<RandomPlayer> randomPlayers;
+    private final List<GamePlayer> gamePlayers;
     private final RoomRepository roomRepository;
     private final Turn currentTurn;
     private final Random random = new Random();
 
-    public RandomGame(List<RandomPlayer> randomPlayers, RoomRepository roomRepository)
+    public GameImpl(List<GamePlayer> gamePlayers, RoomRepository roomRepository)
     {
-        this.randomPlayers = randomPlayers;
+        this.gamePlayers = gamePlayers;
         this.roomRepository = roomRepository;
-        currentTurn = new TurnImpl(randomPlayers);
+        currentTurn = new TurnImpl(gamePlayers);
     }
 
     @Override
@@ -42,16 +42,16 @@ public class RandomGame implements Game
         assignCharacters();
         var player = currentTurn.getGuesser();
         player.setPlayerState(PlayerState.ASK_QUESTION);
-        randomPlayers
+        gamePlayers
             .stream()
             .filter(randomPlayer -> !randomPlayer.getId().equals(player.getId()))
             .forEach(randomPlayer -> randomPlayer.setPlayerState(PlayerState.ANSWER_QUESTION));
     }
 
     @Override
-    public List<RandomPlayer> getGamePLayers()
+    public List<GamePlayer> getGamePLayers()
     {
-        return randomPlayers;
+        return gamePlayers;
     }
 
     @Override
@@ -63,14 +63,14 @@ public class RandomGame implements Game
     @Override
     public boolean isFinished()
     {
-        return randomPlayers.size() == 1;
+        return gamePlayers.size() == 1;
     }
 
     @Override
     public void askQuestion(String roomId, String playerId, QuestionRequest askQuestion)
     {
         Room room = checkRoomExistence(roomId);
-        List<RandomPlayer> players = room.getRandomPlayers();
+        List<GamePlayer> players = room.getRandomPlayers();
         cleanPlayersValues(players);
         if (room.getRoomState().equals(RoomState.GAME_IN_PROGRESS))
         {
@@ -95,7 +95,7 @@ public class RandomGame implements Game
     public void answerQuestion(String roomId, String playerId, QuestionAnswer questionAnswer)
     {
         Room room = checkRoomExistence(roomId);
-        List<RandomPlayer> players = room.getRandomPlayers();
+        List<GamePlayer> players = room.getRandomPlayers();
         if (room.getRoomState().equals(RoomState.GAME_IN_PROGRESS))
         {
             var answerPlayer = players
@@ -135,7 +135,7 @@ public class RandomGame implements Game
     public void askGuessingQuestion(String roomId, String playerId, QuestionRequest askQuestion, boolean guessStatus)
     {
         Room room = checkRoomExistence(roomId);
-        List<RandomPlayer> players = room.getRandomPlayers();
+        List<GamePlayer> players = room.getRandomPlayers();
         cleanPlayersValues(players);
         if (room.getRoomState().equals(RoomState.GAME_IN_PROGRESS))
         {
@@ -163,7 +163,7 @@ public class RandomGame implements Game
     public void answerGuessingQuestion(String roomId, String playerId, QuestionAnswer questionAnswer, boolean guessStatus)
     {
         Room room = checkRoomExistence(roomId);
-        List<RandomPlayer> players = room.getRandomPlayers();
+        List<GamePlayer> players = room.getRandomPlayers();
         if (room.getRoomState().equals(RoomState.GAME_IN_PROGRESS))
         {
             var answerPlayer = players
@@ -219,7 +219,7 @@ public class RandomGame implements Game
 
     private void assignCharacters()
     {
-        var availableCharacters = randomPlayers.stream().map(RandomPlayer::getCharacter).collect(Collectors.toList());
+        var availableCharacters = gamePlayers.stream().map(GamePlayer::getCharacter).collect(Collectors.toList());
 
 
         for (int i = availableCharacters.size() - 1; i >= 1; i--)
@@ -228,7 +228,7 @@ public class RandomGame implements Game
         }
 
         AtomicInteger a = new AtomicInteger();
-        randomPlayers.forEach(randomPlayer -> randomPlayer.setCharacter(availableCharacters.get(a.getAndIncrement())));
+        gamePlayers.forEach(randomPlayer -> randomPlayer.setCharacter(availableCharacters.get(a.getAndIncrement())));
     }
 
     private Room checkRoomExistence(String roomId)
@@ -238,7 +238,7 @@ public class RandomGame implements Game
                 () -> new RoomNotFoundException(String.format(ROOM_NOT_FOUND_BY_ID, roomId)));
     }
 
-    private void cleanPlayersValues(List<RandomPlayer> players)
+    private void cleanPlayersValues(List<GamePlayer> players)
     {
         players.forEach(randomPlayer -> {
             randomPlayer.setEnteredAnswer(false);
@@ -247,5 +247,4 @@ public class RandomGame implements Game
             randomPlayer.setPlayerAnswer(null);
         });
     }
-
 }

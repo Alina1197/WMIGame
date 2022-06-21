@@ -34,9 +34,9 @@ public class RoomController
     }
 
     @GetMapping
-    public List<RoomDetails> findAvailableRooms(@RequestParam String playerId)
+    public List<RoomDetails> findAvailableRooms()
     {
-        return this.roomService.findAvailableRooms(playerId);
+        return this.roomService.findAvailableRooms();
     }
 
     @GetMapping("/{id}")

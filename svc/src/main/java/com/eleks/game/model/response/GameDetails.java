@@ -1,7 +1,7 @@
 package com.eleks.game.model.response;
 
 import com.eleks.game.core.Turn;
-import com.eleks.game.core.impl.RandomGame;
+import com.eleks.game.core.impl.GameImpl;
 
 import java.util.Objects;
 
@@ -18,7 +18,7 @@ public class GameDetails
         this.currentTurn = turn;
     }
 
-    public static GameDetails of(RandomGame game)
+    public static GameDetails of(GameImpl game)
     {
         return new GameDetails(game.getTurn());
     }

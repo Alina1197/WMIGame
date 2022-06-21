@@ -4,7 +4,7 @@ import com.eleks.game.enums.PlayerState;
 
 import java.util.Objects;
 
-public class RandomPlayer
+public class GamePlayer
 {
     private String id;
     private String roomId;
@@ -18,7 +18,7 @@ public class RandomPlayer
     private String playerQuestion;
     private String playerAnswer;
 
-    public RandomPlayer(String id, String roomId, String nickname)
+    public GamePlayer(String id, String roomId, String nickname)
     {
         this.id = id;
         this.roomId = roomId;
@@ -146,7 +146,7 @@ public class RandomPlayer
         {
             return false;
         }
-        RandomPlayer that = (RandomPlayer) o;
+        GamePlayer that = (GamePlayer) o;
         return suggestStatus == that.suggestStatus && enteredAnswer == that.enteredAnswer && enteredQuestion == that.enteredQuestion && guessing == that.guessing &&
             Objects.equals(id, that.id) && Objects.equals(roomId, that.roomId) && Objects.equals(nickname, that.nickname) &&
             Objects.equals(character, that.character) && playerState == that.playerState && Objects.equals(playerQuestion, that.playerQuestion) &&

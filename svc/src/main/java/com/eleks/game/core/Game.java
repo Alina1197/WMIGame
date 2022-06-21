@@ -1,6 +1,6 @@
 package com.eleks.game.core;
 
-import com.eleks.game.core.impl.RandomPlayer;
+import com.eleks.game.core.impl.GamePlayer;
 import com.eleks.game.enums.QuestionAnswer;
 import com.eleks.game.model.request.QuestionRequest;
 
@@ -10,7 +10,7 @@ public interface Game
 {
     void startGame();
 
-    List<RandomPlayer> getGamePLayers();
+    List<GamePlayer> getGamePLayers();
 
     Turn getTurn();
 

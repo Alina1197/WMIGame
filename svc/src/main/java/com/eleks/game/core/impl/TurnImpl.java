@@ -10,10 +10,10 @@ import java.util.List;
 public class TurnImpl implements Turn
 {
     private final List<QuestionAnswer> playersAnswers = new ArrayList<>();
-    private List<RandomPlayer> players;
+    private List<GamePlayer> players;
     private int currentPlayerIndex = 0;
 
-    public TurnImpl(List<RandomPlayer> players)
+    public TurnImpl(List<GamePlayer> players)
     {
         this.players = players;
     }
@@ -29,13 +29,13 @@ public class TurnImpl implements Turn
     }
 
     @Override
-    public RandomPlayer getGuesser()
+    public GamePlayer getGuesser()
     {
         return this.players.get(currentPlayerIndex);
     }
 
     @Override
-    public void changeTurn(List<RandomPlayer> players)
+    public void changeTurn(List<GamePlayer> players)
     {
         this.players = players;
         this.currentPlayerIndex = this.currentPlayerIndex + 1 >= this.players.size() ? 0 : this.currentPlayerIndex + 1;

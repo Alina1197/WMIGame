@@ -1,6 +1,6 @@
 package com.eleks.game.service.impl;
 
-import com.eleks.game.core.impl.RandomGame;
+import com.eleks.game.core.impl.GameImpl;
 import com.eleks.game.entity.Room;
 import com.eleks.game.enums.RoomState;
 import com.eleks.game.exception.DuplicateRoomException;
@@ -12,7 +12,7 @@ import com.eleks.game.model.response.GameDetails;
 import com.eleks.game.model.response.PlayerDetails;
 import com.eleks.game.model.response.RoomDetails;
 import com.eleks.game.model.request.RoomRequest;
-import com.eleks.game.core.impl.RandomPlayer;
+import com.eleks.game.core.impl.GamePlayer;
 import com.eleks.game.repository.RoomRepository;
 import com.eleks.game.service.RoomService;
 
@@ -55,18 +55,18 @@ public class RoomServiceImpl implements RoomService
     public GameDetails startGame(String roomId)
     {
         Room room = checkRoomExistence(roomId);
-        List<RandomPlayer> randomPlayers = room.getRandomPlayers();
+        List<GamePlayer> gamePlayers = room.getRandomPlayers();
         switch (room.getRoomState())
         {
             case GAME_IN_PROGRESS:
                 throw new RoomStateException("Game already in progress! Find another one to play!");
             case READY_TO_PLAY:
-                if (randomPlayers
+                if (gamePlayers
                     .stream()
-                    .filter(RandomPlayer::isSuggestStatus)
+                    .filter(GamePlayer::isSuggestStatus)
                     .count() == 4)
                 {
-                    var randomGame = new RandomGame(randomPlayers, roomRepository);
+                    var randomGame = new GameImpl(gamePlayers, roomRepository);
                     randomGame.startGame();
                     room.setGame(randomGame);
                     room.setRoomState(RoomState.GAME_IN_PROGRESS);
@@ -77,15 +77,17 @@ public class RoomServiceImpl implements RoomService
                 throw new RoomStateException("Game can not be started! Players suggesting characters! " +
                     "Waiting for other players to contribute their characters" +
                     "Players left: " +
-                    randomPlayers
+                    gamePlayers
                         .stream()
                         .filter(randomPlayer -> !randomPlayer.isSuggestStatus())
-                        .map(RandomPlayer::getNickname)
+                        .map(GamePlayer::getNickname)
                         .collect(Collectors.toList()));
             case WAITING_FOR_PLAYERS:
                 throw new RoomStateException("Game can not be started!" +
                     " Waiting for additional players! " +
-                    "Current players number: " + randomPlayers.size() + "/4");
+                    "Current players number: " + gamePlayers.size() + "/4");
+            default:
+                throw new RoomStateException("Unrecognized state!");
         }
         return null;
     }
@@ -94,13 +96,13 @@ public class RoomServiceImpl implements RoomService
     public PlayerDetails enrollToRoom(String roomId, String playerId)
     {
         Room room = checkRoomExistence(roomId);
-        RandomPlayer player;
+        GamePlayer player;
         if (room.getRoomState().equals(RoomState.WAITING_FOR_PLAYERS))
         {
             var playersInRoom = room.getRandomPlayers();
             if (playersInRoom.stream().noneMatch(randomPlayer -> randomPlayer.getId().equals(playerId)))
             {
-                player = new RandomPlayer(playerId, roomId, "Player-" + (playersInRoom.size() + 1));
+                player = new GamePlayer(playerId, roomId, "Player-" + (playersInRoom.size() + 1));
                 playersInRoom.add(player);
                 if (playersInRoom.size() == 4)
                 {
@@ -116,9 +118,9 @@ public class RoomServiceImpl implements RoomService
     }
 
     @Override
-    public List<RoomDetails> findAvailableRooms(String playerId)
+    public List<RoomDetails> findAvailableRooms()
     {
-        return roomRepository.findAllRooms(playerId).stream()
+        return roomRepository.findAllRooms().stream()
             .filter(room -> room.getRoomState().equals(RoomState.WAITING_FOR_PLAYERS))
             .map(RoomDetails::of)
             .collect(Collectors.toList());
@@ -145,7 +147,7 @@ public class RoomServiceImpl implements RoomService
                 throw new RoomStateException("You already suggest the character");
             }
 
-            if (players.stream().filter(RandomPlayer::isSuggestStatus).count() == 4)
+            if (players.stream().filter(GamePlayer::isSuggestStatus).count() == 4)
             {
                 room.setRoomState(RoomState.READY_TO_PLAY);
             }

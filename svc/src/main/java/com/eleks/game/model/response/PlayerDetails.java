@@ -1,6 +1,6 @@
 package com.eleks.game.model.response;
 
-import com.eleks.game.core.impl.RandomPlayer;
+import com.eleks.game.core.impl.GamePlayer;
 
 import java.util.Objects;
 
@@ -19,7 +19,7 @@ public class PlayerDetails
     {
     }
 
-    public static PlayerDetails of(RandomPlayer player)
+    public static PlayerDetails of(GamePlayer player)
     {
         return new PlayerDetails(player.getId(), player.getNickname());
     }
